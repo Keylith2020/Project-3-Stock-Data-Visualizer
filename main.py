@@ -28,16 +28,18 @@ while yesCheck == "y":
 	timeType = input("Enter time series option (1, 2, 3, 4): ")
 
 	# Ask the user for the beginning date in YYYY-MM-DD
-	date1 = input("Enter the start Date (YYYY-MM-DD): ")
+	date1array = input("Enter the start Date (YYYY-MM-DD): ").split("-")
+	date1 = datetime(int(date1array[0]), int(date1array[1]), int(date1array[2]))
 
 	# Ask the user for the end date in YYY-MM-DD format
-	date2 = input("Enter the end Date (YYYY-MM-DD): ")
+	date2array = input("Enter the end Date (YYYY-MM-DD): ").split("-")
+	date2 = datetime(int(date2array[0]), int(date2array[1]), int(date2array[2]))
 
 	# Check to make sure end date is not before if begin date
 	# If it is, reprompt the user for the end date
+    
 
 	# Generate a graph and open in the user's default browser
 
 	# Ask user if they would like to view more data
 	yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
-
