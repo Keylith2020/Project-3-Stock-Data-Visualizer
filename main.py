@@ -1,53 +1,79 @@
-# main.py
-
 import requests
 import lxml
 import pygal
 import pandas as pd  # Standard alias for pandas
 from datetime import datetime
+from data_fetcher import fetch_stock_data  # Function to fetch stock data
+from config import API_KEY  # API key for accessing the stock data API
 
-def user_input(): 
+def get_user_input():
+    """Get user input for stock symbol, chart type, and time series type."""
+    stockSymbol = input("Enter the stock symbol for the company you want data for: ")
+    graphNum = input("Enter the chart type you would like (1: Bar | 2: Line): ")
+    
+    print("Select the Time Series of the chart you want to Generate: ")
+    print("(1) Intraday | (2) Daily | (3) Weekly | (4) Monthly")
+    timeType = input("Enter time series option (1, 2, 3, 4): ")
+    
+    return stockSymbol, graphNum, timeType
 
-    return
+def get_validated_dates():
+    """Get and validate start and end dates from user input."""
+    while True:
+        start_date_str = input("Enter the start Date (YYYY-MM-DD): ")
+        end_date_str = input("Enter the end Date (YYYY-MM-DD): ")
+        
+        start_date, end_date = validate_dates(start_date_str, end_date_str)
+        if start_date and end_date:
+            return start_date, end_date
+        print("Please enter valid dates.")
 
-def call_api():
 
-    return
+def main():
+    """Main application logic to fetch stock data and generate graphs."""
+    yesCheck = "y"
+    while yesCheck.lower() == "y":  # Convert to lowercase for consistency
+        # Get user input
+        stockSymbol, graphNum, timeType = get_user_input()
 
-# Application logic
-yesCheck = "y"
-while yesCheck == "y":
-	# Ask the user to enter the stock symbol for the company they want data for
-	stockSymbol = input("Enter the stock symbol for the company you want data for: ")
+        # Map user input to API function strings
+        time_series_function_map = {
+            "1": "TIME_SERIES_INTRADAY",
+            "2": "TIME_SERIES_DAILY",
+            "3": "TIME_SERIES_WEEKLY",
+            "4": "TIME_SERIES_MONTHLY"
+        }
 
-	# Ask the user for the chart type they would like
-	print("Enter the chart type you would like (1, 2): ")
-	graphNum = input("(1)Bar | (2) Line: ")
+        # Get the corresponding time series function from the map
+        time_series_function = time_series_function_map.get(timeType)
+        interval = '5min' if time_series_function == "TIME_SERIES_INTRADAY" else None
 
-	# Ask the user for the time series function they want the api to use
-	print("Select the Time Series of the chart you want to Generate: ")
-	print("(1)Intraday | (2)Daily | (3)Weekly | (4)Monthly")
-	timeType = input("Enter time series option (1, 2, 3, 4): ")
+        if not time_series_function:
+            print("Invalid time series option selected.")
+            continue  # Reprompt the user if the input is invalid
 
-	# Ask the user for the beginning date in YYYY-MM-DD
-	date1array = input("Enter the start Date (YYYY-MM-DD): ").split("-")
-	date1 = datetime(int(date1array[0]), int(date1array[1]), int(date1array[2]))
+        # Ask the user for the beginning and end dates in YYYY-MM-DD
+        start_date_str = input("Enter the start Date (YYYY-MM-DD): ")
+        end_date_str = input("Enter the end Date (YYYY-MM-DD): ")
 
-	# Ask the user for the end date in YYY-MM-DD format
-	date2array = input("Enter the end Date (YYYY-MM-DD): ").split("-")
-	date2 = datetime(int(date2array[0]), int(date2array[1]), int(date2array[2]))
+        # Validate dates
+        date1, date2 = validate_dates(start_date_str, end_date_str)
+        if date1 is None or date2 is None:
+            continue  # Reprompt if dates are invalid
 
-	# Check to make sure end date is not before if begin date
-	# If it is, reprompt the user for the end date
-	if date1 > date2:
-		print("Please enter an end date that is after the start date.")
-		continue
+        # Fetch stock data
+        stock_data = fetch_stock_data(stockSymbol, time_series_function, date1.date(), date2.date(), interval)
+
+        # Check if stock data was retrieved successfully
+        if stock_data is None:
+            print("No stock data found. Please try again.")
+            continue  # Reprompt the user if data is not found
 
         # Generate a graph and open in the user's default browser
         # (Graph generation code would go here)
 
         # Ask user if they would like to view more data
-        yes_check = input("Would you like to view more stock data? Press 'y' to continue: ")
+        yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
 
 if __name__ == "__main__":
     main()
