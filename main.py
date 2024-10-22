@@ -7,7 +7,7 @@ from data_fetcher import fetch_stock_data  # Function to fetch stock data
 from config import API_KEY  # API key for accessing the stock data API
 
 def get_user_input():
-    """Get user input for stock symbol, chart type, and time series type."""
+    # Get user input for stock symbol, chart type, and time series type
     stockSymbol = input("Enter the stock symbol for the company you want data for: ")
     graphNum = input("Enter the chart type you would like (1: Bar | 2: Line): ")
     
@@ -16,6 +16,21 @@ def get_user_input():
     timeType = input("Enter time series option (1, 2, 3, 4): ")
     
     return stockSymbol, graphNum, timeType
+
+def validate_dates(start_date_str, end_date_str):
+    # Create start datetime object
+	start_date_array = start_date_str.split("-")
+	start_date = datetime(int(start_date_array[0]), int(start_date_array[1]), int(start_date_array[2]))
+
+	# Create end datetime object
+	end_date_array = end_date_str.split("-")
+	end_date = datetime(int(end_date_array[0]), int(end_date_array[1]), int(end_date_array[2]))
+
+	# Check if end date is before start date
+	if start_date > end_date:
+		return False
+	else:
+		return True
 
 def get_validated_dates():
     """Get and validate start and end dates from user input."""
@@ -28,9 +43,8 @@ def get_validated_dates():
             return start_date, end_date
         print("Please enter valid dates.")
 
-
+# Main application logic to fetch stock data and generate graphs.
 def main():
-    """Main application logic to fetch stock data and generate graphs."""
     yesCheck = "y"
     while yesCheck.lower() == "y":  # Convert to lowercase for consistency
         # Get user input
@@ -68,17 +82,17 @@ def main():
         if stock_data is None:
             print("No stock data found. Please try again.")
             continue  # Reprompt the user if data is not found
-
+        
 	# Send api request and get json data returned
-	url = f'https://alphavantageapi.co/timeseries/analytics?SYMBOLS={stockSymbol}&RANGE={date1}&RANGE={date2}&INTERVAL={timeSeries}&CALCULATIONS=MIN,MAX,MEAN,MEDIAN&apikey={API_KEY}'
-	response = requests.get(url)
-	data = response.json()
-	print(data)
+    url = f'https://alphavantageapi.co/timeseries/analytics?SYMBOLS={stockSymbol}&RANGE={date1}&RANGE={date2}&INTERVAL={timeSeries}&CALCULATIONS=MIN,MAX,MEAN,MEDIAN&apikey={API_KEY}'
+    response = requests.get(url)
+    data = response.json()
+    print(data)
 
 	# Generate a graph and open in the user's default browser
 
-        # Ask user if they would like to view more data
-        yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
+    # Ask user if they would like to view more data
+    yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
 
 if __name__ == "__main__":
     main()
