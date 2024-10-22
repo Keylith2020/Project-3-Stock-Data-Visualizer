@@ -5,9 +5,9 @@ import pandas as pd  # Standard alias for pandas
 from datetime import datetime
 from data_fetcher import fetch_stock_data  # Function to fetch stock data
 from config import API_KEY  # API key for accessing the stock data API
-
+   
+# Get user input for stock symbol, chart type, and time series type
 def get_user_input():
-    # Get user input for stock symbol, chart type, and time series type
     stockSymbol = input("Enter the stock symbol for the company you want data for: ")
     graphNum = input("Enter the chart type you would like (1: Bar | 2: Line): ")
     
@@ -17,23 +17,30 @@ def get_user_input():
     
     return stockSymbol, graphNum, timeType
 
+# Validate the start and end dates provided by the user
 def validate_dates(start_date_str, end_date_str):
-    # Create start datetime object
-	start_date_array = start_date_str.split("-")
-	start_date = datetime(int(start_date_array[0]), int(start_date_array[1]), int(start_date_array[2]))
+	try:
+		# Create start datetime object
+		start_date_array = start_date_str.split("-")
+		start_date = datetime(int(start_date_array[0]), int(start_date_array[1]), int(start_date_array[2]))
 
-	# Create end datetime object
-	end_date_array = end_date_str.split("-")
-	end_date = datetime(int(end_date_array[0]), int(end_date_array[1]), int(end_date_array[2]))
+		# Create end datetime object
+		end_date_array = end_date_str.split("-")
+		end_date = datetime(int(end_date_array[0]), int(end_date_array[1]), int(end_date_array[2]))
+          
+		# Check if end date is before start date
+		if start_date > end_date:
+			print("Error: Start date must be before end date")
+			return None, None
+		else:
+			return start_date, end_date
+          
+	except ValueError:
+		print("Error: Please enter dates in the format YYYY-MM-DD")
+		return None, None
 
-	# Check if end date is before start date
-	if start_date > end_date:
-		return False
-	else:
-		return True
-
+# Get and validate start and end dates from user input
 def get_validated_dates():
-    """Get and validate start and end dates from user input."""
     while True:
         start_date_str = input("Enter the start Date (YYYY-MM-DD): ")
         end_date_str = input("Enter the end Date (YYYY-MM-DD): ")
@@ -43,7 +50,7 @@ def get_validated_dates():
             return start_date, end_date
         print("Please enter valid dates.")
 
-# Main application logic to fetch stock data and generate graphs.
+# Main
 def main():
     yesCheck = "y"
     while yesCheck.lower() == "y":  # Convert to lowercase for consistency
@@ -67,16 +74,10 @@ def main():
             continue  # Reprompt the user if the input is invalid
 
         # Ask the user for the beginning and end dates in YYYY-MM-DD
-        start_date_str = input("Enter the start Date (YYYY-MM-DD): ")
-        end_date_str = input("Enter the end Date (YYYY-MM-DD): ")
-
-        # Validate dates
-        date1, date2 = validate_dates(start_date_str, end_date_str)
-        if date1 is None or date2 is None:
-            continue  # Reprompt if dates are invalid
+        start_date, end_date = get_validated_dates()
 
         # Fetch stock data
-        stock_data = fetch_stock_data(stockSymbol, time_series_function, date1.date(), date2.date(), interval)
+        stock_data = fetch_stock_data(stockSymbol, time_series_function, start_date, end_date, interval)
 
         # Check if stock data was retrieved successfully
         if stock_data is None:
