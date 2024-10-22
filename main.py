@@ -37,7 +37,9 @@ while yesCheck == "y":
 
 	# Check to make sure end date is not before if begin date
 	# If it is, reprompt the user for the end date
-    
+	if date1 > date2:
+		print("Please enter an end date that is after the start date.")
+		continue
 
 	# Generate a graph and open in the user's default browser
 
