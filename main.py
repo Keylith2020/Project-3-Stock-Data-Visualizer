@@ -17,6 +17,19 @@ def get_user_input():
     
     return stockSymbol, graphNum, timeType
 
+def validate_dates(start_date_str, end_date_str):
+    """Validate the start and end dates provided by the user."""
+    try:
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+        if start_date > end_date:
+            print("Error: Start date must be before or equal to end date.")
+            return None, None
+        return start_date, end_date
+    except ValueError:
+        print("Error: Please enter dates in the format YYYY-MM-DD.")
+        return None, None
+
 def get_validated_dates():
     """Get and validate start and end dates from user input."""
     while True:
@@ -27,7 +40,6 @@ def get_validated_dates():
         if start_date and end_date:
             return start_date, end_date
         print("Please enter valid dates.")
-
 
 def main():
     """Main application logic to fetch stock data and generate graphs."""
@@ -53,16 +65,10 @@ def main():
             continue  # Reprompt the user if the input is invalid
 
         # Ask the user for the beginning and end dates in YYYY-MM-DD
-        start_date_str = input("Enter the start Date (YYYY-MM-DD): ")
-        end_date_str = input("Enter the end Date (YYYY-MM-DD): ")
-
-        # Validate dates
-        date1, date2 = validate_dates(start_date_str, end_date_str)
-        if date1 is None or date2 is None:
-            continue  # Reprompt if dates are invalid
+        start_date, end_date = get_validated_dates()
 
         # Fetch stock data
-        stock_data = fetch_stock_data(stockSymbol, time_series_function, date1.date(), date2.date(), interval)
+        stock_data = fetch_stock_data(stockSymbol, time_series_function, start_date, end_date, interval)
 
         # Check if stock data was retrieved successfully
         if stock_data is None:
