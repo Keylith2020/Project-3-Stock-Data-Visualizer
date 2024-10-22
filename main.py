@@ -5,78 +5,43 @@ import lxml
 import pygal
 import pandas as pd  # Standard alias for pandas
 from datetime import datetime
-from data_fetcher import fetch_stock_data  # Function to fetch stock data
-from config import API_KEY  # API key for accessing the stock data API
 
-def get_user_input():
-    """Get user input for stock symbol, chart type, and time series type."""
-    stock_symbol = input("Enter the stock symbol for the company you want data for: ")
-    graph_num = input("Enter the chart type you would like (1: Bar | 2: Line): ")
-    
-    print("Select the Time Series of the chart you want to Generate: ")
-    print("(1) Intraday | (2) Daily | (3) Weekly | (4) Monthly")
-    time_type = input("Enter time series option (1, 2, 3, 4): ")
-    
-    return stock_symbol, graph_num, time_type
+def user_input(): 
 
-def validate_dates(start_date_str, end_date_str):
-    """Validate the start and end dates."""
-    try:
-        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
-        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
-    except ValueError:
-        print("Invalid date format. Please use YYYY-MM-DD.")
-        return None, None
+    return
 
-    if start_date > end_date:
-        print("End date must be after the start date.")
-        return None, None
+def call_api():
 
-    return start_date, end_date
+    return
 
-def get_validated_dates():
-    """Get and validate start and end dates from user input."""
-    while True:
-        start_date_str = input("Enter the start Date (YYYY-MM-DD): ")
-        end_date_str = input("Enter the end Date (YYYY-MM-DD): ")
-        
-        start_date, end_date = validate_dates(start_date_str, end_date_str)
-        if start_date and end_date:
-            return start_date, end_date
-        print("Please enter valid dates.")
+# Application logic
+yesCheck = "y"
+while yesCheck == "y":
+	# Ask the user to enter the stock symbol for the company they want data for
+	stockSymbol = input("Enter the stock symbol for the company you want data for: ")
 
-def main():
-    """Main application logic to fetch stock data and generate graphs."""
-    yes_check = "y"
-    while yes_check.lower() == "y":  # Convert to lowercase for consistency
-        # Get user input
-        stock_symbol, graph_num, time_type = get_user_input()
+	# Ask the user for the chart type they would like
+	print("Enter the chart type you would like (1, 2): ")
+	graphNum = input("(1)Bar | (2) Line: ")
 
-        # Map user input to API function strings
-        time_series_function_map = {
-            "1": "TIME_SERIES_INTRADAY",
-            "2": "TIME_SERIES_DAILY",
-            "3": "TIME_SERIES_WEEKLY",
-            "4": "TIME_SERIES_MONTHLY"
-        }
+	# Ask the user for the time series function they want the api to use
+	print("Select the Time Series of the chart you want to Generate: ")
+	print("(1)Intraday | (2)Daily | (3)Weekly | (4)Monthly")
+	timeType = input("Enter time series option (1, 2, 3, 4): ")
 
-        # Get the corresponding time series function from the map
-        time_series_function = time_series_function_map.get(time_type)
+	# Ask the user for the beginning date in YYYY-MM-DD
+	date1array = input("Enter the start Date (YYYY-MM-DD): ").split("-")
+	date1 = datetime(int(date1array[0]), int(date1array[1]), int(date1array[2]))
 
-        if not time_series_function:
-            print("Invalid time series option selected.")
-            continue  # Reprompt the user if the input is invalid
+	# Ask the user for the end date in YYY-MM-DD format
+	date2array = input("Enter the end Date (YYYY-MM-DD): ").split("-")
+	date2 = datetime(int(date2array[0]), int(date2array[1]), int(date2array[2]))
 
-        # Get validated start and end dates
-        start_date, end_date = get_validated_dates()
-
-        # Fetch stock data
-        stock_data = fetch_stock_data(stock_symbol, time_series_function, start_date.date(), end_date.date())
-
-        # Check if stock data was retrieved successfully
-        if stock_data is None:
-            print("No stock data found. Please try again.")
-            continue  # Reprompt the user if data is not found
+	# Check to make sure end date is not before if begin date
+	# If it is, reprompt the user for the end date
+	if date1 > date2:
+		print("Please enter an end date that is after the start date.")
+		continue
 
         # Generate a graph and open in the user's default browser
         # (Graph generation code would go here)
