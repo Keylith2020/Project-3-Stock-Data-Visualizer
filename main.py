@@ -69,8 +69,13 @@ def main():
             print("No stock data found. Please try again.")
             continue  # Reprompt the user if data is not found
 
-        # Generate a graph and open in the user's default browser
-        # (Graph generation code would go here)
+	# Send api request and get json data returned
+	url = f'https://alphavantageapi.co/timeseries/analytics?SYMBOLS={stockSymbol}&RANGE={date1}&RANGE={date2}&INTERVAL={timeSeries}&CALCULATIONS=MIN,MAX,MEAN,MEDIAN&apikey={API_KEY}'
+	response = requests.get(url)
+	data = response.json()
+	print(data)
+
+	# Generate a graph and open in the user's default browser
 
         # Ask user if they would like to view more data
         yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
