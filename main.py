@@ -15,17 +15,33 @@ def call_api():
 # Application logic
 yesCheck = "y"
 while yesCheck == "y":
+	graphNum = 0
+	timeType = 0
 	# Ask the user to enter the stock symbol for the company they want data for
 	stockSymbol = input("Enter the stock symbol for the company you want data for: ")
 
 	# Ask the user for the chart type they would like
-	print("Enter the chart type you would like (1, 2): ")
-	graphNum = input("(1)Bar | (2) Line: ")
+	while graphNum==0:
+		print("Enter the chart type you would like (1, 2): ")
+		graphNum = int(input("(1)Bar | (2) Line: "))
+		if graphNum == 1:
+			print("You chose 1!")
+		elif graphNum == 2:
+			print("You chose 2!")
 
 	# Ask the user for the time series function they want the api to use
 	print("Select the Time Series of the chart you want to Generate: ")
 	print("(1)Intraday | (2)Daily | (3)Weekly | (4)Monthly")
-	timeType = input("Enter time series option (1, 2, 3, 4): ")
+	while timeType==0:
+		timeType = int(input("Enter time series option (1, 2, 3, 4): "))
+		if timeType == 1:
+			print("You chose 1!")
+		if timeType == 2:
+			print("You chose 2!")
+		if timeType == 3:
+			print("You chose 3!")
+		if timeType == 4:
+			print("You chose 4!")
 
 	# Ask the user for the beginning date in YYYY-MM-DD
 	date1array = input("Enter the start Date (YYYY-MM-DD): ").split("-")
