@@ -50,7 +50,7 @@ def get_validated_dates():
             return start_date, end_date
         print("Please enter valid dates.")
 
-# Main
+# Main application logic
 def main():
     yesCheck = "y"
     while yesCheck.lower() == "y":  # Convert to lowercase for consistency
@@ -83,12 +83,6 @@ def main():
         if stock_data is None:
             print("No stock data found. Please try again.")
             continue  # Reprompt the user if data is not found
-        
-	# Send api request and get json data returned
-    url = f'https://alphavantageapi.co/timeseries/analytics?SYMBOLS={stockSymbol}&RANGE={date1}&RANGE={date2}&INTERVAL={timeSeries}&CALCULATIONS=MIN,MAX,MEAN,MEDIAN&apikey={API_KEY}'
-    response = requests.get(url)
-    data = response.json()
-    print(data)
 
 	# Generate a graph and open in the user's default browser
 
