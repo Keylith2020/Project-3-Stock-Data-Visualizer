@@ -8,14 +8,36 @@ from config import API_KEY  # API key for accessing the stock data API
    
 # Get user input for stock symbol, chart type, and time series type
 def get_user_input():
-    stockSymbol = input("Enter the stock symbol for the company you want data for: ")
-    graphNum = input("Enter the chart type you would like (1: Bar | 2: Line): ")
-    
-    print("Select the Time Series of the chart you want to Generate: ")
-    print("(1) Intraday | (2) Daily | (3) Weekly | (4) Monthly")
-    timeType = input("Enter time series option (1, 2, 3, 4): ")
-    
-    return stockSymbol, graphNum, timeType
+	graphNum = 0
+    	timeType = 0
+	
+	stockSymbol = input("Enter the stock symbol for the company you want data for: ")
+
+	while True:
+    		try:
+        		print("Enter the chart type you would like (1, 2): ")
+        		graphNum = int(input("(1)Bar | (2) Line: "))
+			if graphNum in [1, 2]:
+            			break
+       			else:
+            			print("Invalid choice. Please enter 1 or 2.")
+    		except ValueError:
+        		print("Invalid input. Please enter a number (1 or 2).")
+	
+	while True:
+    		try:
+        		print("Select the Time Series of the chart you want to Generate: ")
+        		print("(1) Intraday | (2) Daily | (3) Weekly | (4) Monthly")
+        		timeType = int(input("Enter time series option (1, 2, 3, 4): "))
+
+        		if timeType in [1, 2, 3, 4]:
+            			break
+        		else:
+            			print("Invalid choice, please enter 1, 2, 3, or 4.")
+    		except ValueError:
+        		print("Invalid input. Please enter a number (1, 2, 3, or 4).")
+	
+	return stockSymbol, graphNum, timeType
 
 # Validate the start and end dates provided by the user
 def validate_dates(start_date_str, end_date_str):
