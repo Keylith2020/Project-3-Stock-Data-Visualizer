@@ -4,7 +4,6 @@ from datetime import datetime
 from data_fetcher import fetch_stock_data  # Function to fetch stock data
 from config import API_KEY  # API key for accessing the stock data API
 from IPython.display import display, SVG
-import webbrowser
 import os
 import platform
    
