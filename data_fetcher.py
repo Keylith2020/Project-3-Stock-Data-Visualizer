@@ -53,8 +53,15 @@ def fetch_stock_data(symbol, time_series_function, start_date, end_date, interva
         return None
 
     # Convert to pandas DataFrame
-    df = pd.DataFrame.from_dict(data[time_series_key], orient='index')
+    df = pd.DataFrame.from_dict(data[time_series_key], orient='index', columns=['1. open', '2. high', '3. low', '4. close', '5. volume'])
     df.index = pd.to_datetime(df.index)
+
+    # Convert data types explicitly (ensure no strings are present)
+    df['1. open'] = df['1. open'].astype(float)
+    df['2. high'] = df['2. high'].astype(float)
+    df['3. low'] = df['3. low'].astype(float)
+    df['4. close'] = df['4. close'].astype(float)
+    df['5. volume'] = df['5. volume'].astype(int)
 
     # Convert start_date and end_date to pandas Timestamps
     start_date = pd.Timestamp(start_date)
