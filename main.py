@@ -124,6 +124,24 @@ def main():
         closes = stock_data['4. close'].tolist()
         volumes = stock_data['5. volume'].tolist()
 		
+		  # Reverse the stock data by sorting the index (dates)
+        stock_data = stock_data.sort_index()  # Ensure data is sorted by date
+
+        dates = stock_data.index.strftime('%b %d').tolist()
+        opens = stock_data['1. open'].tolist()
+        highs = stock_data['2. high'].tolist()
+        lows = stock_data['3. low'].tolist()
+        closes = stock_data['4. close'].tolist()
+        volumes = stock_data['5. volume'].tolist()
+
+        # Reverse the lists to display in ascending order
+        dates.reverse()
+        opens.reverse()
+        highs.reverse()
+        lows.reverse()
+        closes.reverse()
+        volumes.reverse()
+
         # Generate a graph and open in the user's default browser
         if(graphNum == 1):
             bar_chart = pygal.Bar(x_label_rotation=45, show_minor_x_labels=False)
