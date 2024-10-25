@@ -76,9 +76,10 @@ def get_validated_dates():
         print("Please enter valid dates.")
 
 # Main application logic
+# Main application logic
 def main():
     yesCheck = "y"
-    while yesCheck.lower() == "y":  # Convert to lowercase for consistency
+    while yesCheck.lower() == "y":
         # Get user input
         stockSymbol, graphNum, timeType = get_user_input()
 
@@ -91,7 +92,7 @@ def main():
         }
 
         # Get the corresponding time series function from the map
-        time_series_function = time_series_function_map.get(timeType)
+        time_series_function = time_series_function_map.get(str(timeType))  # Convert to string
         interval = '5min' if time_series_function == "TIME_SERIES_INTRADAY" else None
 
         if not time_series_function:
@@ -109,10 +110,11 @@ def main():
             print("No stock data found. Please try again.")
             continue  # Reprompt the user if data is not found
 
-	# Generate a graph and open in the user's default browser
+        # Generate a graph and open in the user's default browser
 
-    # Ask user if they would like to view more data
-    yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
+        # Ask user if they would like to view more data
+        yesCheck = input("Would you like to view more stock data? Press 'y' to continue: ")
+
 
 if __name__ == "__main__":
     main()
