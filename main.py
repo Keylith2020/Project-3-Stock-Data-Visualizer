@@ -1,5 +1,3 @@
-import requests
-import lxml
 import pygal
 import pandas as pd  # Standard alias for pandas
 from datetime import datetime
@@ -102,7 +100,7 @@ def main():
         }
 
         # Get the corresponding time series function from the map
-        time_series_function = time_series_function_map.get(str(timeType))  # Convert to string
+        time_series_function = time_series_function_map.get(timeType)  # Convert to string
         interval = '5min' if time_series_function == "TIME_SERIES_INTRADAY" else None
 
         if not time_series_function:
