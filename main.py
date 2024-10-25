@@ -1,6 +1,6 @@
 import pygal
 import pandas as pd  # Standard alias for pandas
-from datetime import datetime
+from datetime import datetime, timedelta
 from data_fetcher import fetch_stock_data  # Function to fetch stock data
 from config import API_KEY  # API key for accessing the stock data API
 from IPython.display import display, SVG
@@ -108,6 +108,14 @@ def main():
 
         # Ask the user for the beginning and end dates in YYYY-MM-DD
         start_date, end_date = get_validated_dates()
+		
+		# Generate the range of dates
+        date_range = []
+        current_datetime = start_date
+
+        while current_datetime <= end_date:
+            date_range.append(str(current_datetime))
+            current_datetime += timedelta(days=30)
 
         # Fetch stock data
         stock_data = fetch_stock_data(stockSymbol, time_series_function, start_date, end_date, interval)
@@ -139,7 +147,7 @@ def main():
         if(graphNum == 1):
             bar_chart = pygal.Bar(x_label_rotation=45, show_minor_x_labels=False)
             bar_chart.title = 'Stock Volume'
-            bar_chart.x_labels = dates
+            bar_chart.x_labels = date_range
             bar_chart.add('Volume', volumes)
             bar_chart_filename = "stock_prices_bar_chart.svg"
             bar_chart.render_to_file(bar_chart_filename)
@@ -147,7 +155,7 @@ def main():
         elif(graphNum == 2):
             line_chart = pygal.Line(x_label_rotation=45, show_minor_x_labels=False)
             line_chart.title = 'Stock Prices (OHLC)'
-            line_chart.x_labels = dates
+            line_chart.x_labels = date_range
             line_chart.add('Open', opens)
             line_chart.add('High', highs)
             line_chart.add('Low', lows)
