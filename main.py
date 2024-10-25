@@ -8,6 +8,7 @@ from config import API_KEY  # API key for accessing the stock data API
    
 # Get user input for stock symbol, chart type, and time series type
 def get_user_input():
+	
 	graphNum = 0
     	timeType = 0
 	
@@ -16,7 +17,7 @@ def get_user_input():
 	while True:
     		try:
         		print("Enter the chart type you would like (1, 2): ")
-        		graphNum = int(input("(1)Bar | (2) Line: "))
+        		graphNum = int(input("(1) Bar | (2) Line: "))
 			if graphNum in [1, 2]:
             			break
        			else:
@@ -26,7 +27,7 @@ def get_user_input():
 	
 	while True:
     		try:
-        		print("Select the Time Series of the chart you want to Generate: ")
+        		print("Select the Time Series of the chart you want to generate: ")
         		print("(1) Intraday | (2) Daily | (3) Weekly | (4) Monthly")
         		timeType = int(input("Enter time series option (1, 2, 3, 4): "))
 
