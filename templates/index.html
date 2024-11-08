@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Stock Data Visualizer {% endblock %}</h1>
+    <form action="/submit" method="post">
+        <label for="symbol">Choose Symbol:</label>
+        <select name="symbol" id="symbol">
+            <option value="deault">Select a Symbol</option>
+            {% for symbol in symbols %}
+                <option value="{{ symbol }}">{{ symbol }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="chart">Choose Chart Type:</label>
+        <select name="chart" id="symbol">
+            <option value="default">Select a Chart Type</option>
+            <option value="bar">1. Bar</option>
+            <option value="line">2. Line</option>
+        </select>
+        <br>
+        <label for="time">Choose Time Series:</label>
+        <select name="time" id="time">
+            <option value="default">Select a Time Series</option>
+            <option value="TIME_SERIES_INTRADAY">Intraday</option>
+            <option value="TIME_SERIES_DAILY">Daily</option>
+            <option value="TIME_SERIES_WEEKLY">Weekly</option>
+            <option value="TIME_SERIES_MONTHLY">Monthly</option>
+        </select>
+        <br>
+        <label for="start">Start Date:</label>
+        <input type="date" id="start" name="start">
+        <br>
+        <label for="end">Start Date:</label>
+        <input type="date" id="end" name="end">
+        <br>
+        <input type="submit">
+    </form>
+
+    {% if  svg_url %}
+    <div id="svg_display" style="margin-top: 20px;">
+        {{ svg_data | safe }}
+    </div>
+    {% endif %}
+{% endblock %}

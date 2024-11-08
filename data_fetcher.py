@@ -1,8 +1,10 @@
 import requests
 import pandas as pd
+import pygal
+import os
 from config import API_KEY  # Import API_KEY from config.py
 
-def fetch_stock_data(symbol, time_series_function, start_date, end_date, interval='5min'):
+def fetch_stock_data(symbol, time_series_function, start_date, end_date, graphType, interval='5min'):
     # Construct the base URL
     base_url = "https://www.alphavantage.co/query"
     
@@ -70,4 +72,28 @@ def fetch_stock_data(symbol, time_series_function, start_date, end_date, interva
     # Filter the DataFrame based on the date range
     df = df[(df.index >= start_date) & (df.index <= end_date)]
 
-    return df
+    dates = df.index.strftime('%b %d').tolist()
+    opens = df['1. open'].tolist()
+    highs = df['2. high'].tolist()
+    lows = df['3. low'].tolist()
+    closes = df['4. close'].tolist()
+    volumes = df['5. volume'].tolist()
+    
+    # Generate a graph and return chart as svg string
+    if(graphType == "bar"):
+        bar_chart = pygal.Bar(x_label_rotation=45, show_minor_x_labels=False)
+        bar_chart.title = 'Stock Volume'
+        bar_chart.x_labels = dates
+        bar_chart.add('Volume', volumes)
+        svg_data = bar_chart.render(is_unicode=True)
+    elif(graphType == "line"):
+        line_chart = pygal.Line(x_label_rotation=45, show_minor_x_labels=False)
+        line_chart.title = 'Stock Prices (OHLC)'
+        line_chart.x_labels = dates
+        line_chart.add('Open', opens)
+        line_chart.add('High', highs)
+        line_chart.add('Low', lows)
+        line_chart.add('Close', closes)
+        svg_data = line_chart.render(is_unicode=True)
+    
+    return svg_data
