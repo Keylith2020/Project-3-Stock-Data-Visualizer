@@ -1,9 +1,6 @@
-import sqlite3
 import data_fetcher
 import pandas
-import main
-import os
-from flask import Flask, render_template, request, url_for, flash, redirect, abort, jsonify
+from flask import Flask, render_template, request, flash
 
 # make a flask app object
 app = Flask(__name__)
@@ -27,7 +24,7 @@ def submit():
     start = request.form['start']
     end = request.form['end']
 
-    valid = main.validate_dates(start, end)
+    valid = data_fetcher.validate_dates(start, end)
 
     # if not symbol, chart, time, start, end, or valid dates flash error
     if not symbol:

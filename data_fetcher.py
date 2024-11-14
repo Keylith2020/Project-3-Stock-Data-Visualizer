@@ -1,9 +1,31 @@
 import requests
 import pandas as pd
 import pygal
-import os
 from config import API_KEY  # Import API_KEY from config.py
+from datetime import datetime
 
+# Validate the start and end dates provided by the user
+def validate_dates(start_date_str, end_date_str):
+	try:
+		# Create start datetime object
+		start_date_array = start_date_str.split("-")
+		start_date = datetime(int(start_date_array[0]), int(start_date_array[1]), int(start_date_array[2]))
+
+		# Create end datetime object
+		end_date_array = end_date_str.split("-")
+		end_date = datetime(int(end_date_array[0]), int(end_date_array[1]), int(end_date_array[2]))
+          
+		# Check if end date is before start date
+		if start_date > end_date:
+			print("Error: Start date must be before end date")
+			return False
+		else:
+			return True
+	except:
+		print("Error: Please enter dates in the format YYYY-MM-DD")
+		return False
+
+# Query stock data api with selected filters
 def fetch_stock_data(symbol, time_series_function, start_date, end_date, graphType, interval='5min'):
     # Construct the base URL
     base_url = "https://www.alphavantage.co/query"
